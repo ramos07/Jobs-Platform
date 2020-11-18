@@ -17,8 +17,6 @@ export const login = (username, password) => async (dispatch) => {
         // Make request to server and get the response data
         const { data } = await axios.post('https://divercity-test.herokuapp.com/login', { username, password }, config)
 
-        console.log(data);
-
         // Dispatch the user login success after making the request
         dispatch({
             type: USER_LOGIN_SUCCESS,

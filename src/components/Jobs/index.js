@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ApplyFormContainer, ErrorModalContainer,ErrorBtn, ErrorContent, ErrorBtnLink, JobsContainer, FilterFormContainer, JobPostingsContainer, JobPosting, JobTitle, Loading, JobCompany, JobType, JobLocation, JobDesc, ApplyBtn, JobSkills, Skill, ModalContainer, CloseIcon, ErrorMessage, MotivationInput, CoverLetterInput, SubmitApplicationBtn, FilterGroup, FilterSelect, FilterOption, FilterBtn, FilterBtnWrap } from "./JobsComponent";
+import { ResetFilterBtn, ApplyFormContainer, ErrorModalContainer,ErrorBtn, ErrorContent, ErrorBtnLink, JobsContainer, FilterContainer, JobPostingsContainer, JobPosting, JobTitle, Loading, JobCompany, JobType, JobLocation, JobDesc, ApplyBtn, JobSkills, Skill, ModalContainer, CloseIcon, ErrorMessage, MotivationInput, CoverLetterInput, SubmitApplicationBtn, FilterGroup, FilterSelect, FilterOption, FilterBtn, FilterBtnWrap } from "./JobsComponent";
 
 import { apply } from "../../actions/jobActions";
 
@@ -10,8 +10,10 @@ const Jobs = ({ loading, error, jobs }) => {
 
     const dispatch = useDispatch()
 
+    // Retrieve the user login state from Redux store
     const userLogin = useSelector((state) => state.userLogin)
-    const { userInfo } = userLogin
+    const { userInfo } = userLogin 
+
 
     const [isModalOpen, setIsModalOpen] = useState(false) // Open or close the modal to submit an application
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false) // Open or close modal to display error message
@@ -21,10 +23,21 @@ const Jobs = ({ loading, error, jobs }) => {
     const [motivation, setMotivation] = useState('') // Motivation for application
     const [coverLetter, setCoverLetter] = useState('') // Cover letter for applications
 
-    const [jobTypeFilter, setJobTypeFilter] = useState('')
-    const [jobLocationFilter, setJobLocationFilter] = useState('')
-    const [jobSkillFilter, setjobSkillFilter] = useState('')
-    const [filteredResults, setFilteredResults] = useState([])
+    const [jobTypeFilter, setJobTypeFilter] = useState('') // Job type filter option
+    const [jobLocationFilter, setJobLocationFilter] = useState('') // Job location filter option
+    const [jobSkillFilter, setjobSkillFilter] = useState('') // Job skill filter option
+    const [filteredResults, setFilteredResults] = useState([]) // Filtered job results based off filter options
+
+    const [submittedApplication, setSubmittedApplication] = useState(false)
+
+    const tickMark = '<svg width="58" height="45" viewBox="0 0 58 45" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" fill-rule="nonzero" d="M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65"/></svg>'
+
+
+    if(typeof window !== 'undefined'){
+        if(submittedApplication === false){
+            window.document.getElementById("submit-app-btn").innerHTML = 'Submit'
+        }
+    }
 
     /**
      * Function that removes HTML tags from a string.
@@ -57,6 +70,7 @@ const Jobs = ({ loading, error, jobs }) => {
     function toggleModal(job){
         if(userInfo){
             setIsModalOpen(!isModalOpen)
+            setSubmittedApplication(!submittedApplication)
             setjobToApply(job)
         }else{
             setIsErrorModalOpen(!isErrorModalOpen)
@@ -83,10 +97,16 @@ const Jobs = ({ loading, error, jobs }) => {
     function submitHandler(e){
         e.preventDefault()
         dispatch(apply(jobToApply.id , motivation, coverLetter))
+        setSubmittedApplication(true)
+        if(submittedApplication === true){
+            window.document.getElementById("submit-app-btn").innerHTML = tickMark
+        }
     }
 
-    function filterResults(e){
-        e.preventDefault()
+    /**
+     * Function that filters out the job listings based off the options selected by the user.
+     */
+    function filterResults(){
 
         var results = []
 
@@ -123,9 +143,20 @@ const Jobs = ({ loading, error, jobs }) => {
         setFilteredResults(results)
     }
 
+    /**
+     * Function tht clears the filtered search and resets the options selected as well.
+     */
+    function clearResults(){
+        setJobLocationFilter("")
+        setJobTypeFilter("")
+        setjobSkillFilter("")
+        setFilteredResults([])
+    }
+
     return (
         <JobsContainer>
-            <FilterFormContainer onSubmit={filterResults}>
+            {/* Filters Section */}
+                <FilterContainer>
                 <h2>Filters</h2>
                 <FilterGroup>
                     <FilterSelect onChange={e => setJobTypeFilter(e.target.value)} name="job-type">
@@ -133,7 +164,7 @@ const Jobs = ({ loading, error, jobs }) => {
                         {
                             (typeof(jobs) !== 'undefined' && jobs !== null) && (
                                 jobs.map(job => (
-                                    <FilterOption value={job.job_type}>
+                                    <FilterOption key={job.job_type} value={job.job_type}>
                                         {job.job_type}
                                     </FilterOption>
                                 ))
@@ -147,7 +178,7 @@ const Jobs = ({ loading, error, jobs }) => {
                         {
                             (jobs !== undefined && jobs !== null) && (
                                 jobs.filter(job => job.location !== undefined).map(job => (
-                                    <FilterOption value={job.location}>
+                                    <FilterOption key={job.location} value={job.location}>
                                         {job.location}
                                     </FilterOption>
                                 ))
@@ -162,7 +193,7 @@ const Jobs = ({ loading, error, jobs }) => {
                             (typeof(jobs) !== 'undefined') && (
                                 jobs.map(job => (
                                     job.skills_tag.map(skill => (
-                                        <FilterOption value={skill}>{skill}</FilterOption>
+                                        <FilterOption key={skill} value={skill}>{skill}</FilterOption>
                                     ))
                                 ))
                             )
@@ -170,10 +201,15 @@ const Jobs = ({ loading, error, jobs }) => {
                     </FilterSelect>
                 </FilterGroup>
                 <FilterBtnWrap>
-                    <FilterBtn type="submit">Search</FilterBtn>
+                    <FilterBtn type="button" onClick={filterResults}>Search</FilterBtn>
                 </FilterBtnWrap>
-            </FilterFormContainer>
-            <JobPostingsContainer>
+                <FilterBtnWrap>
+                    <ResetFilterBtn type="button" onClick={clearResults}>Reset</ResetFilterBtn>
+                </FilterBtnWrap>
+            </FilterContainer>
+            {/* End of Filters Section */}
+            {/* Job Postings Section */}
+                <JobPostingsContainer>
                 {loading ? (<Loading src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" />) : 
                     error ? (<p>Error: {error}</p>)
                 : filteredResults.length > 0 ?  (
@@ -224,15 +260,21 @@ const Jobs = ({ loading, error, jobs }) => {
                     </>
                 )}
             </JobPostingsContainer>
+            {/* End of Job Postings Section */}
+            {/* Apply to Job Modal */}
             <ModalContainer isModalOpen={isModalOpen}>
                 <CloseIcon onClick={() => {toggleModal(); clearInput()}}/>
                 <ApplyFormContainer onSubmit={submitHandler}>
                     <JobTitle>{jobToApply.title}</JobTitle>
                     <MotivationInput type="text" placeholder="Motivation" value={motivation} onChange={(e) => setMotivation(e.target.value)} required/>
                     <CoverLetterInput placeholder="Cover Letter" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} required/>
-                    <SubmitApplicationBtn type="submit">Submit</SubmitApplicationBtn>
+                    <SubmitApplicationBtn id="submit-app-btn" type="submit">
+                        Submit
+                    </SubmitApplicationBtn>
                 </ApplyFormContainer>
             </ModalContainer>
+            {/* End of Apply to Job Modal */}
+            {/* Error Modal - Displayed if user is not logged in */}
             <ErrorModalContainer isErrorModalOpen={isErrorModalOpen}>
                 <CloseIcon onClick={showErrorModal} />
                 <ErrorContent>
@@ -246,6 +288,7 @@ const Jobs = ({ loading, error, jobs }) => {
                     </ErrorBtn>
                 </ErrorContent>
             </ErrorModalContainer>
+            {/* End of Error Modal */}
         </JobsContainer>
     )
 }

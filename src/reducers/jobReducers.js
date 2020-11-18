@@ -32,7 +32,7 @@ export const jobApplyReducer = (state = {}, action) => {
         case JOB_APPLY_SUCCESS:
             return {
                 loading: false,
-                jobApply: action.payload
+                applicationStatus: action.payload
             }
         case JOB_APPLY_FAIL:
             return {

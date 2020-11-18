@@ -7,7 +7,7 @@ export const JobsContainer = styled.div`
     padding: 1rem;
 `
 
-export const FilterFormContainer = styled.form`
+export const FilterContainer = styled.div`
     display: flex;
     column-gap: 1rem;
     padding: 2rem;
@@ -180,6 +180,13 @@ export const ApplyFormContainer = styled.form`
     row-gap: 1.5rem;
 `
 
+export const ApplyFormMessage = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: red;
+`
+
 export const MotivationInput = styled.input`
     border-radius: 15px;
     padding: 10px 20px;
@@ -204,6 +211,7 @@ export const SubmitApplicationBtn = styled.button`
     border: none;
     cursor: pointer;
     text-decoration: none;
+    transition: all .3s cubic-bezier(.67, .17, .40, .83);
 `
 
 export const ErrorModalContainer = styled.div`
