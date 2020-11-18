@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import { Route, Switch } from "react-router-dom";
 
-function App() {
+// Pages
+import HomePage from './pages/Home'
+import LoginPage from './pages/Login'
+import RegisterPage from './pages/Register'
+import JobsPage from './pages/Jobs'
+
+// Navigation menu
+import Navbar from './components/common/Navbar'
+import Sidebar from './components/common/Sidebar'
+
+const App = () => {
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggle = () => {
+      setIsOpen(!isOpen)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Sidebar isOpen={isOpen} toggle={toggle} />
+      <Navbar toggle={toggle} />
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/signup" component={RegisterPage} />
+        <Route path="/jobs" component={JobsPage} />
+        <Route path="/" exact component={HomePage} />
+      </Switch>
+    </>
+  )
 }
 
-export default App;
+export default App
