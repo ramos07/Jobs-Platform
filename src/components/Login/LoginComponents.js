@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const LoginContainer = styled.div`
@@ -10,14 +11,13 @@ export const LoginFormWrapper = styled.form`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 1px solid black;
     border-radius: 15px;
     padding: 4rem;
     display: flex;
     flex-direction: column;
     row-gap: 2rem;
     text-align: center;
-    background: black;
+    background: rgb(45,45,43);
     color: white;
 
     @media screen and (max-width: 768px){
@@ -36,10 +36,10 @@ export const PasswordInput = styled.input`
 `
 export const LoginButton = styled.button`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(240, 228, 216);
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: rgb(45,45,43);
     font-size: 16px;
     outline: none;
     border: none;
@@ -49,7 +49,11 @@ export const LoginButton = styled.button`
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
+        background: rgb(249,249,249);
+        color: rgb(45,45,43);
     }
+`
+
+export const SignUpLink = styled(Link)`
+    color: lightblue;
 `

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ApplyFormContainer, ErrorModalContainer,ErrorBtn, ErrorContent, ErrorBtnLink, JobsContainer, FilterFormContainer, JobPostingsContainer, JobPosting, JobTitle, Loading, JobCompany, JobType, JobLocation, JobDesc, ApplyBtn, JobSkills, Skill, ModalContainer, CloseIcon, ErrorMessage, MotivationInput, CoverLetterInput, SubmitApplicationBtn, FilterGroup, FilterSelect, FilterOption, FilterBtn, ResetFilterBtn, FilterBtnWrap } from "./JobsComponent";
+import { ApplyFormContainer, ErrorModalContainer,ErrorBtn, ErrorContent, ErrorBtnLink, JobsContainer, FilterFormContainer, JobPostingsContainer, JobPosting, JobTitle, Loading, JobCompany, JobType, JobLocation, JobDesc, ApplyBtn, JobSkills, Skill, ModalContainer, CloseIcon, ErrorMessage, MotivationInput, CoverLetterInput, SubmitApplicationBtn, FilterGroup, FilterSelect, FilterOption, FilterBtn, FilterBtnWrap } from "./JobsComponent";
 
 import { apply } from "../../actions/jobActions";
 
@@ -88,19 +88,39 @@ const Jobs = ({ loading, error, jobs }) => {
     function filterResults(e){
         e.preventDefault()
 
-        const jobFilters = {
-            location: location => location === jobLocationFilter,
-            job_type: job_type => job_type === jobTypeFilter,
-            skills_tag: skills_tag => skills_tag.includes(jobSkillFilter)
-        }
-    
-        
-    }
+        var results = []
 
-    function resetFilters(){
-        setjobSkillFilter("")
-        setJobTypeFilter("")
-        setJobLocationFilter("")
+        if(typeof jobs !== 'undefined' || jobs !== null){
+
+            // Filter job listings by the city and add it to the results array if located
+            if(jobLocationFilter !== ""){
+                jobs.forEach(job => {
+                    if(job.location === jobLocationFilter){
+                        results.push(job)
+                    }
+                })
+            }
+
+            // Filter job listings by the job type and add it to the results array if located
+            if(jobTypeFilter !== ""){
+                jobs.forEach(job => {
+                    if(job.job_type === jobTypeFilter){
+                        if(!results.includes(job)){ results.push(job) }
+                    }
+                })
+            }
+
+            // Filter job listings by job skill and add it to the results array if located
+            if(jobSkillFilter !== ""){
+                jobs.forEach(job => {
+                    if(job.skills_tag.includes(jobSkillFilter)){
+                        if(!results.includes(job)){ results.push(job) }
+                    }
+                })
+            }
+        }
+
+        setFilteredResults(results)
     }
 
     return (
@@ -109,9 +129,9 @@ const Jobs = ({ loading, error, jobs }) => {
                 <h2>Filters</h2>
                 <FilterGroup>
                     <FilterSelect onChange={e => setJobTypeFilter(e.target.value)} name="job-type">
-                        {jobTypeFilter && <FilterOption value="">Job Type</FilterOption>}
+                        <FilterOption value="">Job Type</FilterOption>
                         {
-                            (jobs !== undefined && jobs !== null) && (
+                            (typeof(jobs) !== 'undefined' && jobs !== null) && (
                                 jobs.map(job => (
                                     <FilterOption value={job.job_type}>
                                         {job.job_type}
@@ -139,7 +159,7 @@ const Jobs = ({ loading, error, jobs }) => {
                     <FilterSelect onChange={e => setjobSkillFilter(e.target.value)} name="job-skill">
                         <FilterOption value="">Job Skills</FilterOption>
                         {
-                            (jobs !== undefined && jobs !== null) && (
+                            (typeof(jobs) !== 'undefined') && (
                                 jobs.map(job => (
                                     job.skills_tag.map(skill => (
                                         <FilterOption value={skill}>{skill}</FilterOption>
@@ -151,16 +171,36 @@ const Jobs = ({ loading, error, jobs }) => {
                 </FilterGroup>
                 <FilterBtnWrap>
                     <FilterBtn type="submit">Search</FilterBtn>
-                    <ResetFilterBtn type="button" onClick={resetFilters}>Reset</ResetFilterBtn>
                 </FilterBtnWrap>
             </FilterFormContainer>
             <JobPostingsContainer>
                 {loading ? (<Loading src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" />) : 
                     error ? (<p>Error: {error}</p>)
-                : (
+                : filteredResults.length > 0 ?  (
+                    <>
+                        {filteredResults.map(job => (
+                            <JobPosting key={job.id}>
+                                <JobTitle>{job.title}</JobTitle>
+                                <JobCompany>{capitalize(job.company)}</JobCompany>
+                                <JobType>{job.job_type}</JobType>
+                                <JobLocation>{job.location}</JobLocation>
+                                <JobDesc>{stripHtmlTags(job.description)}</JobDesc>
+                                <h3>Requirements</h3>
+                                <JobSkills>
+                                    {job.skills_tag !== undefined && job.skills_tag !== null  ? (
+                                        job.skills_tag.map(tag => <Skill>{tag}</Skill>)
+                                    ) : (
+                                        null
+                                    )}
+                                </JobSkills>
+                                <ApplyBtn onClick={(e) => toggleModal(job)}>Apply</ApplyBtn>
+                            </JobPosting>
+                        ))}
+                    </>
+                ) : (
                     <>
                     {
-                        (jobs !== undefined && jobs !== null) ? (
+                        (typeof jobs !== 'undefined' && jobs !== null) ? (
                             jobs.map((job) => (
                                 <JobPosting key={job.id}>
                                     <JobTitle>{job.title}</JobTitle>

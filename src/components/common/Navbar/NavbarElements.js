@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Link as LinkR } from "react-router-dom";
 
 export const Nav = styled.nav`
-    background: #000;
+    background: rgb(45,45,43);
     height: 80px;
     margin-top: --80px;
     display: flex;
@@ -30,7 +30,7 @@ export const NavbarContainer = styled.div`
 `
 
 export const NavLogo = styled(LinkR)`
-    color: #fff;
+    color: rgb(249, 249, 249);
     justify-self: flex-start;
     cursor: pointer;
     font-size: 1.5rem;
@@ -73,7 +73,7 @@ export const NavItem = styled.li`
 `
 
 export const NavLinks = styled(LinkR)`
-    color: #fff;
+    color: rgb(249, 249, 249);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -89,7 +89,7 @@ export const NavLinks = styled(LinkR)`
 export const NavBtn = styled.button`
     display: flex;
     align-items: center;
-    background: #010606;
+    background: inherit;
     border: none;
 
     @media screen and (max-width: 786px){
@@ -100,10 +100,10 @@ export const NavBtn = styled.button`
 
 export const NavBtnLink = styled(LinkR)`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(240, 228, 216);
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color:  rgb(45, 45, 43);
     font-size: 16px;
     outline: none;
     border: none;
@@ -113,7 +113,7 @@ export const NavBtnLink = styled(LinkR)`
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
+        background: rgb(249, 249, 249);
         color: #010606;
     }
 `

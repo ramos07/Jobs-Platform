@@ -31,11 +31,11 @@ export const HeroBtn = styled.button`
     align-items: center;
     background: transparent;
     border: none;
-    padding: 2rem 0
+    padding: 2rem 0;
 `
 export const HeroBtnLink = styled(Link)`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(240, 228, 216);
     white-space: nowrap;
     padding: 10px 22px;
     color: #010606;
@@ -48,7 +48,7 @@ export const HeroBtnLink = styled(Link)`
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
+        background: rgb(249,249,249);
+        color:  rgb(45, 45, 43);
     }
 `

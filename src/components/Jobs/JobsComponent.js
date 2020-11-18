@@ -48,10 +48,10 @@ export const FilterBtnWrap = styled.div`
 
 export const FilterBtn = styled.button`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(45,45,43);
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: rgb(249,249,249);
     font-size: 16px;
     outline: none;
     border: none;
@@ -64,7 +64,7 @@ export const ResetFilterBtn = styled.button`
     background: #ff7f7f;
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: rgb(45,45,43);
     font-size: 16px;
     outline: none;
     border: none;
@@ -117,10 +117,10 @@ export const Skill = styled.li`
 
 export const ApplyBtn = styled.button`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(45,45,43);
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: rgb(249,249,249);
     font-size: 16px;
     outline: none;
     border: none;
@@ -130,8 +130,8 @@ export const ApplyBtn = styled.button`
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
+        background: rgb(240,228,216);
+        color: rgb(45,45,43);
     }
 `
 
@@ -149,7 +149,8 @@ export const ModalContainer = styled.div`
     height: 70%;
     width: 50%;
     transform: translate(-50%, -50%);
-    background: silver;
+    background: rgb(45,45,43);
+    color: rgb(249,249,249);
     display: ${({ isModalOpen }) => (isModalOpen ? 'block' : 'none')};
     z-index: 99;
     border-radius: 15px;
@@ -160,7 +161,7 @@ export const ModalContainer = styled.div`
     }
 `
 export const CloseIcon = styled(FaTimes)`
-    color: black;
+    color: rgb(249,249,249);
     position: absolute;
     top: 5%;
     right: 5%;
@@ -213,6 +214,7 @@ export const ErrorModalContainer = styled.div`
     width: 300px;
     transform: translate(-50%, -50%);
     background: #ff7f7f;
+    text-align: center;
     display: ${({ isErrorModalOpen }) => (isErrorModalOpen ? 'block' : 'none')};
     z-index: 99;
     border-radius: 10px;
@@ -234,7 +236,7 @@ export const ErrorMessage = styled.p`
 `
 export const ErrorBtn = styled.button`
     border-radius: 50px;
-    background: black;
+    background: rgb(45,45,43);
     color: white;
     white-space: nowrap;
     padding: 10px 22px;

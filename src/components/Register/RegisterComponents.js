@@ -17,8 +17,8 @@ export const RegisterFormWrapper = styled.form`
     flex-direction: column;
     row-gap: 2rem;
     text-align: center;
-    background: black;
-    color: white;
+    background: rgb(45,45,43);
+    color: rgb(249, 249, 249);
 
     @media screen and (max-width: 768px){
         border: none;
@@ -41,10 +41,10 @@ export const PasswordInput = styled.input`
 `
 export const RegisterButton = styled.button`
     border-radius: 50px;
-    background: #01bf71;
+    background: rgb(240, 228, 216);
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: rgb(45,45,43);
     font-size: 16px;
     outline: none;
     border: none;
@@ -54,7 +54,7 @@ export const RegisterButton = styled.button`
 
     &:hover {
         transition: all 0.2s ease-in-out;
-        background: #fff;
+        background: rgb(249, 249, 249);
         color: #010606;
     }
 `
